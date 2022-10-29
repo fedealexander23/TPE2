@@ -20,7 +20,7 @@ class SongModel{
         return $songs;
     }
     
-    public function getSongID($id){
+    public function get($id){
         // 1. abro conexión a la DB
         // ya esta abierta por el constructor de la clase
 

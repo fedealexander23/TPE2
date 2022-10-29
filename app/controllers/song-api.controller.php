@@ -31,4 +31,15 @@ class SongApiController{
         }
     }
 
+    public function getSong($params = null) {
+        // obtengo el id del arreglo de params
+        $id = $params[':ID'];
+        $song = $this->model->get($id);
+
+        if ($song)
+            $this->view->response($song);
+        else 
+            $this->view->response("La tarea con el id=$id no existe", 404);
+    }
+
 }
