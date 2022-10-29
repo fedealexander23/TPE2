@@ -32,7 +32,7 @@ class SongModel{
         return $songs;
     }
 
-    public function insertSong($title, $genere, $album, $singer){
+    public function insert($title, $genere, $album, $singer){
         // 1. abro conexión a la DB
         // ya esta abierta por el constructor de la clase
 
@@ -56,13 +56,13 @@ class SongModel{
         return $songs;
     }
 
-    public function deleteSongById($id){
+    public function delete($id){
         $query = $this->db->prepare('DELETE FROM songs WHERE id = ?');
         $query->execute([$id]);
     }
 
 
-    public function  editSongById($title, $genere, $album, $singer, $id){
+    public function  edit($title, $genere, $album, $singer, $id){
         $query = $this->db->prepare("UPDATE songs SET title = ? , genere = ?, album = ?, singer = ? WHERE id = ?");
         $query->execute([$title, $genere, $album, $singer, $id]);
 

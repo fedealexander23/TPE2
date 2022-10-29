@@ -36,10 +36,33 @@ class SongApiController{
         $id = $params[':ID'];
         $song = $this->model->get($id);
 
-        if ($song)
+        if ($song){
             $this->view->response($song);
-        else 
+        }else {
             $this->view->response("La tarea con el id=$id no existe", 404);
+        }
     }
 
+    public function deleteSong($params = null) {
+        $id = $params[':ID'];
+
+        $song = $this->model->get($id);
+        if ($song) {
+            $this->model->delete($id);
+            $this->view->response($song);
+        } else {
+            $this->view->response("La tarea con el id=$id no existe", 404);
+        }
+    }
+
+    public function insertSong($params = null) {
+        $song = $this->getData();
+
+        if (empty($song->title) || empty($song->genere) || empty($song->album) || empty($song->singer)) {
+            $this->view->response("Complete los datos", 400);
+        } else {
+            $id = $this->model->insert($song->title, $song->genere, $song->album, $song->singer);
+            $this->view->response("La tarea se inserto con exito con el id=$id", 201);
+        }
+    }
 }
