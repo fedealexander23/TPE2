@@ -62,7 +62,8 @@ class SongApiController{
             $this->view->response("Complete los datos", 400);
         } else {
             $id = $this->model->insert($song->title, $song->genere, $song->album, $song->singer);
-            $this->view->response("La cancion se inserto con exito con el id = $id", 201);
+            $song = $this->model->get($id);
+            $this->view->response($song, 201);
         }
     }
 }
