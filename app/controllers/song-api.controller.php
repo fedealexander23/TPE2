@@ -66,4 +66,17 @@ class SongApiController{
             $this->view->response($song, 201);
         }
     }
+    
+    public function editSong($params = null) {
+        $id = $params[':ID'];
+        $song = $this->getData();
+
+        if (empty($song->title) || empty($song->genere) || empty($song->album) || empty($song->singer) && empty($id)) {
+            $this->view->response("Complete los datos", 400);
+        } else {
+            $this->model->edit($song->title, $song->genere, $song->album, $song->singer, $id);
+            $song = $this->model->get($id);
+            $this->view->response($song, 201);
+        }
+    }
 }
