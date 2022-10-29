@@ -17,4 +17,18 @@ class SongApiController{
         $this->data = file_get_contents("php://input");
     }
 
+    private function getData() {
+        return json_decode($this->data);
+    }
+
+    public function getSongs($params = null) {
+        
+        $songs = $this->model->getAll();
+        if ($songs){
+            $this->view->response($songs);
+        }else{ 
+            $this->view->response("La coleccion no existe", 404);
+        }
+    }
+
 }

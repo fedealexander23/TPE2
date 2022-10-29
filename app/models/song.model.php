@@ -6,7 +6,7 @@ class SongModel{
         $this->db = new PDO('mysql:host=localhost;'.'dbname=tpe1;charset=utf8', 'root', '');
     }
 
-    public function getAllSong() {
+    public function getAll() {
         // 1. abro conexión a la DB
         // ya esta abierta por el constructor de la clase
 
