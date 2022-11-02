@@ -6,7 +6,7 @@ class SingerModel{
         $this->db = new PDO('mysql:host=localhost;'.'dbname=tpe1;charset=utf8', 'root', '');
     }
 
-    public function getAllSinger() {
+    public function getAll() {
         // 1. abro conexión a la DB
         // ya esta abierta por el constructor de la clase
 
@@ -20,7 +20,7 @@ class SingerModel{
         return $singer;
     }
 
-   public function getSingerID($id){
+   public function get($id){
         // 1. abro conexión a la DB
         // ya esta abierta por el constructor de la clase
 
@@ -32,7 +32,7 @@ class SingerModel{
         return $singer;
     }
 
-    public function insertSinger($singer, $nationality, $img = null){
+    public function insert($singer, $nationality, $img = null){
         // 1. abro conexión a la DB
         // ya esta abierta por el constructor de la clase
 
@@ -50,7 +50,7 @@ class SingerModel{
         return $this->db->lastInsertId();
     }
 
-    public function deleteSingerById($singer){
+    public function delete($singer){
         // 1. abro conexión a la DB
         // ya esta abierta por el constructor de la clase
         
@@ -59,7 +59,7 @@ class SingerModel{
         $query->execute([$singer]);
     }
     
-    function editSingerById($singer, $nationality, $id, $img = null){
+    function edit($singer, $nationality, $id, $img = null){
     if ($img){
         $pathImg = $this->uploadImage($img);
         $query = $this->db->prepare("UPDATE singers SET singer = ?, nationality = ?, img = ? WHERE singer = ?");
