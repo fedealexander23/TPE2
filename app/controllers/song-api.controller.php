@@ -22,12 +22,29 @@ class SongApiController{
     }
 
     public function getSongs($params = null) {
-        
-        $songs = $this->model->getAll();
-        if ($songs){
-            $this->view->response($songs);
-        }else{ 
-            $this->view->response("La coleccion no existe", 404);
+        $orderBy = $_GET['orderBy'] ?? null;
+        $orderMode = $_GET['orderMode'] ?? null;
+
+        if(!isset($orderBy)){
+            $song = $this->model->getAll($orderBy, $orderMode);
+            if ($song)
+                $this->view->response($song);
+            else 
+                $this->view->response("La coleccion no existe", 404);
+            }
+        else{
+            if( ($orderBy == 'id') || ($orderBy == 'title') || ($orderBy == 'genere') || 
+            ($orderBy == 'album') || ($orderBy == 'singer') && //preguntar xq tira error
+            ($orderMode == 'ASC' || $orderMode == 'DESC') ){
+                $song = $this->model->getAll($orderBy, $orderMode);
+                if ($song){
+                    $this->view->response($song);
+                }else{ 
+                    $this->view->response("La coleccion no existe", 404);
+                }
+            }else{
+                $this->view->response("La forma de ordenamiento no es valida", 404);
+            }
         }
     }
 
@@ -79,4 +96,6 @@ class SongApiController{
             $this->view->response($song, 201);
         }
     }
+
+
 }

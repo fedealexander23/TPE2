@@ -22,12 +22,25 @@ class SingerApiController{
     }
 
     public function getSingers($params = null) {
-        
-        $singers = $this->model->getAll();
-        if ($singers){
-            $this->view->response($singers);
-        }else{ 
-            $this->view->response("La coleccion no existe", 404);
+        $orderBy = $_GET['orderBy'] ?? null;
+        $orderMode = $_GET['orderMode'] ?? null;
+        if(!isset($orderBy)){
+            $singer = $this->model->getAll($orderBy, $orderMode);
+            if ($singer)
+                $this->view->response($singer);
+            else 
+                $this->view->response("La coleccion no existe", 404);
+            }
+        else{
+            if(($orderBy == 'singer') || ($orderBy == 'nationality') || ($orderBy == 'img') && ($orderMode == 'ASC' || $orderMode == 'DESC')){
+                $singers = $this->model->getAll($orderBy, $orderMode);
+                if ($singers)
+                    $this->view->response($singers);
+                else 
+                    $this->view->response("La coleccion no existe", 404);
+            }else{
+                $this->view->response("La forma de ordenamiento no es valida", 404);
+            }
         }
     }
 
