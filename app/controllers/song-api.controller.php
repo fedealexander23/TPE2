@@ -69,8 +69,8 @@ class SongApiController{
                 $this->view->response("los datos ingresados no son numericos", 404);
             }
         }
-        
-        else{
+
+        elseif($linkTo == null && $equalTo == null && $limit == null && $offset == null){
             print_r('ordenado');
 
             if( ($orderBy == 'id') || ($orderBy == 'title') || ($orderBy == 'genere') || 
