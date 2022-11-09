@@ -14,7 +14,16 @@ class SongModel{
         
         return $songs;
     }    
-    
+
+    public function getPagination($limit, $offset){
+        $query = $this->db->prepare("SELECT * FROM songs LIMIT $offset, $limit");
+        $query->execute();
+
+        // 3. obtengo los resultados
+        $songs = $query->fetchAll(PDO::FETCH_OBJ); // devuelve un arreglo de objetos
+        return $songs; 
+    }
+
     public function getfilter($linkTo, $equalTo){
 
         // preguntar si es inyeccion sql
