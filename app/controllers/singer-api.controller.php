@@ -28,7 +28,12 @@ class SingerApiController{
         $linkTo = $_GET['linkTo'] ?? null;
         $equalTo = $_GET['equalTo'] ?? null;
 
-        if(!isset($orderBy) && !isset($orderMode) && !isset($linkTo) && !isset($equalTo)){
+        $limit = $_GET['limit'] ?? null;
+        $offset = $_GET['offset'] ?? null;
+
+        if( $orderBy == null && $orderMode == null && $linkTo == null && $equalTo == null && $limit == null && $offset == null){
+            print_r('comun'); 
+            
             $singer = $this->model->getAll($orderBy, $orderMode);
             if ($singer)
                 $this->view->response($singer);
@@ -36,15 +41,38 @@ class SingerApiController{
                 $this->view->response("La coleccion no existe", 404);
         }
 
-        elseif(!isset($orderBy) && !isset($orderMode)){
-            $singer = $this->model->getfilter($linkTo, $equalTo);
-            if ($singer)
-                $this->view->response($singer);
-            else 
-                $this->view->response("La coleccion no existe", 404);
+        elseif(!isset($orderBy) && !isset($orderMode) && !isset($limit) && !isset($offset)){
+            print_r("filtrado");
+
+            if($linkTo == null || $equalTo == null){
+                $this->view->response("no completaste todos los datos", 404);
+            }
+            else{
+                $singer = $this->model->getfilter($linkTo, $equalTo);
+                if ($singer)
+                    $this->view->response($singer);
+                else 
+                    $this->view->response("La coleccion no existe", 404);
+            }
+        }
+
+        elseif(!isset($orderBy) && !isset($orderMode) && !isset($linkTo) && !isset($equalTo)){
+            print_r('paginado');
+
+            if(is_numeric($limit) && is_numeric($offset)){
+                $singer = $this->model->getPagination($limit, $offset);
+                if ($singer)
+                    $this->view->response($singer);
+                else 
+                    $this->view->response("La coleccion no existe", 404);
+            }else{
+                $this->view->response("los datos ingresados no son numericos", 404);
+            }
         }
 
         else{
+            print_r('ordenado');
+
             if(($orderBy == 'singer') || ($orderBy == 'nationality') || ($orderBy == 'img') && ($orderMode == 'ASC' || $orderMode == 'DESC')){
                 $singers = $this->model->getOrder($orderBy, $orderMode);
                 if ($singers)

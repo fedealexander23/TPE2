@@ -28,7 +28,12 @@ class SongApiController{
         $linkTo = $_GET['linkTo'] ?? null;
         $equalTo = $_GET['equalTo'] ?? null;
 
-        if(!isset($orderBy) && !isset($orderMode) && !isset($linkTo) && !isset($equalTo)){
+        $limit = $_GET['limit'] ?? null;
+        $offset = $_GET['offset'] ?? null;
+
+        if( $orderBy == null && $orderMode == null && $linkTo == null && $equalTo == null && $limit == null && $offset == null){
+            print_r('comun'); 
+
             $song = $this->model->getAll();
             if ($song)
                 $this->view->response($song);
@@ -36,15 +41,38 @@ class SongApiController{
                 $this->view->response("La coleccion no existe", 404);
         }
         
-        elseif(!isset($orderBy) && !isset($orderMode)){
-            $song = $this->model->getfilter($linkTo, $equalTo);
-            if ($song)
-                $this->view->response($song);
-            else 
-                $this->view->response("La coleccion no existe", 404);
+        elseif($orderBy == null && $orderMode == null && $limit == null && $offset == null){
+            print_r("filtrado");
+
+            if($linkTo == null || $equalTo == null){
+                $this->view->response("no completaste todos los datos", 404);
+            }
+            else{
+                $song = $this->model->getfilter($linkTo, $equalTo);
+                if ($song)
+                    $this->view->response($song);
+                else 
+                    $this->view->response("La coleccion no existe", 404);
+            }
         }
 
+        elseif($orderBy == null && $orderMode == null && $linkTo == null && $equalTo == null){
+            print_r('paginado');
+
+            if(is_numeric($limit) && is_numeric($offset)){
+                $song = $this->model->getPagination($limit, $offset);
+                if ($song)
+                    $this->view->response($song);
+                else 
+                    $this->view->response("La coleccion no existe", 404);
+            }else{
+                $this->view->response("los datos ingresados no son numericos", 404);
+            }
+        }
+        
         else{
+            print_r('ordenado');
+
             if( ($orderBy == 'id') || ($orderBy == 'title') || ($orderBy == 'genere') || 
             ($orderBy == 'album') || ($orderBy == 'singer') && //preguntar xq tira error
             ($orderMode == 'ASC' || $orderMode == 'DESC') ){

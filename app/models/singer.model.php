@@ -15,7 +15,16 @@ class SingerModel{
         return $singer; 
     }
 
-    function getfilter($linkTo, $equalTo){
+    public function getPagination($limit, $offset){
+        $query = $this->db->prepare("SELECT * FROM singers LIMIT $offset, $limit");
+        $query->execute();
+
+        // 3. obtengo los resultados
+        $singer = $query->fetchAll(PDO::FETCH_OBJ); // devuelve un arreglo de objetos
+        return $singer; 
+    }
+
+    public function getfilter($linkTo, $equalTo){
         $query = $this->db->prepare("SELECT * FROM singers WHERE $linkTo LIKE ?");
         $query->execute(["%$equalTo%"]);
         // 3. obtengo los resultados
