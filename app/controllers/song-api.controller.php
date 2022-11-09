@@ -25,18 +25,30 @@ class SongApiController{
         $orderBy = $_GET['orderBy'] ?? null;
         $orderMode = $_GET['orderMode'] ?? null;
 
-        if(!isset($orderBy)){
-            $song = $this->model->getAll($orderBy, $orderMode);
+        $linkTo = $_GET['linkTo'] ?? null;
+        $equalTo = $_GET['equalTo'] ?? null;
+
+        if(!isset($orderBy) && !isset($orderMode) && !isset($linkTo) && !isset($equalTo)){
+            $song = $this->model->getAll();
             if ($song)
                 $this->view->response($song);
             else 
                 $this->view->response("La coleccion no existe", 404);
-            }
+        }
+        
+        elseif(!isset($orderBy) && !isset($orderMode)){
+            $song = $this->model->getfilter($linkTo, $equalTo);
+            if ($song)
+                $this->view->response($song);
+            else 
+                $this->view->response("La coleccion no existe", 404);
+        }
+
         else{
             if( ($orderBy == 'id') || ($orderBy == 'title') || ($orderBy == 'genere') || 
             ($orderBy == 'album') || ($orderBy == 'singer') && //preguntar xq tira error
             ($orderMode == 'ASC' || $orderMode == 'DESC') ){
-                $song = $this->model->getAll($orderBy, $orderMode);
+                $song = $this->model->getOrder($orderBy, $orderMode);
                 if ($song){
                     $this->view->response($song);
                 }else{ 
@@ -46,6 +58,17 @@ class SongApiController{
                 $this->view->response("La forma de ordenamiento no es valida", 404);
             }
         }
+
+        //Preguntar como hacer esta funcion para que no haya repeticion de codigo
+        /*
+        function get(){
+            $song = $this->model->getAll($orderBy, $orderMode, $linkTo, $equalTo);
+            if ($song){
+                $this->view->response($song);
+            }else{ 
+                $this->view->response("La coleccion no existe", 404);
+            }
+        }*/
     }
 
     public function getSong($params = null) {

@@ -6,29 +6,35 @@ class SongModel{
         $this->db = new PDO('mysql:host=localhost;'.'dbname=tpe1;charset=utf8', 'root', '');
     }
 
-    public function getAll($orderBy, $orderMode) {
-    
-        if($orderBy != null && $orderMode != null)
-            $query = $this->db->prepare("SELECT * FROM songs ORDER BY $orderBy $orderMode"); 
-        else
-            $query = $this->db->prepare("SELECT * FROM songs");
-            $query->execute();
-        // 3. obtengo los resultados
-        $songs = $query->fetchAll(PDO::FETCH_OBJ); // devuelve un arreglo de objetos
-        
-        return $songs;
-    }
-    /*
-    public function getAll() {
-    
+    public function getAll(){
         $query = $this->db->prepare("SELECT * FROM songs");
         $query->execute();
         // 3. obtengo los resultados
         $songs = $query->fetchAll(PDO::FETCH_OBJ); // devuelve un arreglo de objetos
         
         return $songs;
+    }    
+    
+    public function getfilter($linkTo, $equalTo){
+
+        // preguntar si es inyeccion sql
+        $query = $this->db->prepare("SELECT * FROM songs WHERE $linkTo LIKE ?");
+        $query->execute(["%$equalTo%"]);
+
+        $songs = $query->fetchAll(PDO::FETCH_OBJ); // devuelve un arreglo de objetos
+        
+        return $songs;
     }
-*/
+
+    public function getOrder($orderBy, $orderMode){
+        $query = $this->db->prepare("SELECT * FROM songs ORDER BY $orderBy $orderMode");
+        $query->execute();
+        // 3. obtengo los resultados
+        $songs = $query->fetchAll(PDO::FETCH_OBJ); // devuelve un arreglo de objetos
+        
+        return $songs;
+    }
+
     public function get($id){
         // 1. abro conexión a la DB
         // ya esta abierta por el constructor de la clase

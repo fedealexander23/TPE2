@@ -24,16 +24,29 @@ class SingerApiController{
     public function getSingers($params = null) {
         $orderBy = $_GET['orderBy'] ?? null;
         $orderMode = $_GET['orderMode'] ?? null;
-        if(!isset($orderBy)){
+
+        $linkTo = $_GET['linkTo'] ?? null;
+        $equalTo = $_GET['equalTo'] ?? null;
+
+        if(!isset($orderBy) && !isset($orderMode) && !isset($linkTo) && !isset($equalTo)){
             $singer = $this->model->getAll($orderBy, $orderMode);
             if ($singer)
                 $this->view->response($singer);
             else 
                 $this->view->response("La coleccion no existe", 404);
-            }
+        }
+
+        elseif(!isset($orderBy) && !isset($orderMode)){
+            $singer = $this->model->getfilter($linkTo, $equalTo);
+            if ($singer)
+                $this->view->response($singer);
+            else 
+                $this->view->response("La coleccion no existe", 404);
+        }
+
         else{
             if(($orderBy == 'singer') || ($orderBy == 'nationality') || ($orderBy == 'img') && ($orderMode == 'ASC' || $orderMode == 'DESC')){
-                $singers = $this->model->getAll($orderBy, $orderMode);
+                $singers = $this->model->getOrder($orderBy, $orderMode);
                 if ($singers)
                     $this->view->response($singers);
                 else 

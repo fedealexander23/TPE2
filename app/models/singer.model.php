@@ -6,19 +6,32 @@ class SingerModel{
         $this->db = new PDO('mysql:host=localhost;'.'dbname=tpe1;charset=utf8', 'root', '');
     }
 
-    public function getAll($orderBy, $orderMode) {
-        if($orderBy != null && $orderMode != null)
-            $query = $this->db->prepare("SELECT * FROM singers ORDER BY $orderBy $orderMode"); 
-        else
-            $query = $this->db->prepare("SELECT * FROM singers");
-            $query->execute();
+    function getAll(){
+        $query = $this->db->prepare("SELECT * FROM singers");
+        $query->execute();
+
         // 3. obtengo los resultados
         $singer = $query->fetchAll(PDO::FETCH_OBJ); // devuelve un arreglo de objetos
-        
+        return $singer; 
+    }
+
+    function getfilter($linkTo, $equalTo){
+        $query = $this->db->prepare("SELECT * FROM singers WHERE $linkTo LIKE ?");
+        $query->execute(["%$equalTo%"]);
+        // 3. obtengo los resultados
+        $singer = $query->fetchAll(PDO::FETCH_OBJ); // devuelve un arreglo de objetos
         return $singer;
     }
 
-   public function get($id){
+    public function getOrder($orderBy, $orderMode){
+        $query = $this->db->prepare("SELECT * FROM singers ORDER BY $orderBy $orderMode");
+        $query->execute();
+        // 3. obtengo los resultados
+        $singer = $query->fetchAll(PDO::FETCH_OBJ); // devuelve un arreglo de objetos
+        return $singer; 
+    }
+
+    public function get($id){
         // 1. abro conexión a la DB
         // ya esta abierta por el constructor de la clase
 
