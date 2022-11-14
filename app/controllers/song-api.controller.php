@@ -69,8 +69,8 @@ class SongApiController{
                 $this->view->response("los datos ingresados no son numericos", 404);
             }
         }
-        
-        else{
+
+        elseif($linkTo == null && $equalTo == null && $limit == null && $offset == null){
             print_r('ordenado');
 
             if( ($orderBy == 'id') || ($orderBy == 'title') || ($orderBy == 'genere') || 
@@ -86,17 +86,6 @@ class SongApiController{
                 $this->view->response("La forma de ordenamiento no es valida", 404);
             }
         }
-
-        //Preguntar como hacer esta funcion para que no haya repeticion de codigo
-        /*
-        function get(){
-            $song = $this->model->getAll($orderBy, $orderMode, $linkTo, $equalTo);
-            if ($song){
-                $this->view->response($song);
-            }else{ 
-                $this->view->response("La coleccion no existe", 404);
-            }
-        }*/
     }
 
     public function getSong($params = null) {
