@@ -72,7 +72,6 @@ class SongModel{
         // ya esta abierta por el constructor de la clase
 
         // 2. ejecuto la sentencia (2 subpasos)
-        //$query = $this->db->prepare("SELECT * FROM songs WHERE singer = ?");
         $query = $this->db->prepare("SELECT * FROM songs WHERE singer LIKE ?");
         $query->execute(["%$singer%"]);
         $songs = $query->fetchAll(PDO::FETCH_OBJ); // devuelve un arreglo de objetos

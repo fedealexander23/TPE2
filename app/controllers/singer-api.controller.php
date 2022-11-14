@@ -16,18 +16,19 @@ class SingerApiController{
         // lee el body del request
         $this->data = file_get_contents("php://input");
     }
-
+    
     private function getData() {
         return json_decode($this->data);
     }
 
+    
     public function getSingers($params = null) {
         $orderBy = $_GET['orderBy'] ?? null;
         $orderMode = $_GET['orderMode'] ?? null;
-
+        
         $linkTo = $_GET['linkTo'] ?? null;
         $equalTo = $_GET['equalTo'] ?? null;
-
+        
         $limit = $_GET['limit'] ?? null;
         $offset = $_GET['offset'] ?? null;
 
@@ -145,4 +146,5 @@ class SingerApiController{
             }
         }
     }
+
 }
